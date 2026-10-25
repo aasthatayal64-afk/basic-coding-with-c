@@ -1,25 +1,60 @@
-/*Q48: Write a program to print the following pattern:
-1
-12
-123
-1234
-12345*/
-
+/*Q123: Read a text file and count the total number of characters, words, and lines. A word is 
+defined as a sequence of non-space characters separated by spaces or newlines.*/
+#include <stdio.h>
 
 #include <stdio.h>
 
 int main()
 {
-    int i, j;
+    FILE *fp;
+    char ch;
+    int characters = 0;
+    int words = 0;
+    int lines = 0;
+    int inWord = 0;
 
-    for(i = 1; i <= 5; i++)
+    fp = fopen("sample.txt", "r");
+
+    if (fp == NULL)
     {
-        for(j = 1; j <= i; j++)
-        {
-            printf("%d", j);
-        }
-        printf("\n");
+        printf("File could not be opened.");
+        return 1;
     }
+
+    while ((ch = fgetc(fp)) != EOF)
+    {
+        // Count characters
+        characters++;
+
+        // Count lines
+        if (ch == '\n')
+        {
+            lines++;
+        }
+
+        // Count words
+        if (ch == ' ' || ch == '\n' || ch == '\t')
+        {
+            inWord = 0;
+        }
+        else if (inWord == 0)
+        {
+            words++;
+            inWord = 1;
+        }
+    }
+
+    // Count last line if file doesn't end with \n
+    if (characters > 0)
+    {
+        lines++;
+    }
+
+    fclose(fp);
+
+    printf("Characters: %d\n", characters);
+    printf("Words: %d\n", words);
+    printf("Lines: %d\n", lines);
 
     return 0;
 }
